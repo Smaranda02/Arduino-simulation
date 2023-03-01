@@ -1,0 +1,67 @@
+//define variables
+#define trigerPin 12
+#define echoPin 13
+#define ledPin 2
+#define speakerPin 10
+#define pitch 262
+
+double duration, distance; 
+
+
+void setup() {
+
+  //press on the ultrasonic distance sensor in order for the distance oscilator to appear
+
+
+  //setup for Sensor
+  //The sensor sends a burst of ultrasound and listens for the echo when
+  // it bounces back from an object (just like the bats do)
+  Serial.begin(9600);
+  pinMode(trigerPin, OUTPUT);
+  pinMode(echoPin,INPUT);
+
+  //setup for LED
+  pinMode(ledPin, OUTPUT);
+
+  //setup for speaker
+  pinMode(speakerPin, OUTPUT);
+
+
+}
+
+void loop() {
+  //looping sensor (creating sound wave)
+  digitalWrite(trigerPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigerPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigerPin, LOW);
+  delayMicroseconds(2);
+
+  //get duration
+  duration=pulseIn(echoPin,HIGH);
+
+  //calculate distance
+  //we divide the duration by 2 because we get the the time of the travelling wave
+  //from both ways (forth and back) and we multiply the time by the speed of sound (cm/s)
+  distance =(duration/2)*0.0343;
+
+  //consider maximum distance until the alarm is set to be 200 cm
+  if(distance<200)
+  {
+    digitalWrite(ledPin, HIGH);
+    tone(speakerPin, pitch);
+    delay(300);
+
+    digitalWrite(ledPin, LOW);
+    noTone(speakerPin);
+    delay(300);
+  }
+
+  else {
+
+    digitalWrite(ledPin, LOW);
+    noTone(speakerPin);
+  }
+
+}
