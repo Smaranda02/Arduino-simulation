@@ -1,3 +1,5 @@
+//simulate this code on https://wokwi.com/
+
 //define variables
 #define trigerPin 12
 #define echoPin 13
